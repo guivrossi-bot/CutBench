@@ -17,6 +17,9 @@ const EXOTIC_METALS = {
   "Titanium":          { cutsLike: "SS",  speedMult: 1.1,   gas: "N2 (best) / Air",   note: "Slightly faster than SS. Recommended to cut underwater — reduces fumes, HAZ and fire risk.", waterWarning: "under" },
 };
 
+// ── Platforms excluded from results (bad/unverified data) ────────────────────
+const EXCLUDED_PLATFORMS = /bystronic|bysprint/i;
+
 // ── Reference categories ───────────────────────────────────────────────────────
 // Every data row belongs to one of three source types shown in the comparator.
 const REF = {
@@ -567,7 +570,7 @@ export default function CutComparator({ onBack }) {
       .order("feedrate_mmpm", { ascending: false })
       .then(({ data, error }) => {
         if (error) setError(error.message);
-        else setResults(data || []);
+        else setResults((data || []).filter(r => !EXCLUDED_PLATFORMS.test(r.platform?.model ?? "")));
         setLoading(false);
       });
   }, [material, thickness]);
