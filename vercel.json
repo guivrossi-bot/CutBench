@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/labs/cutbench/assets/:path*", "destination": "/assets/:path*" },
+    { "source": "/labs/cutbench/:path*", "destination": "/index.html" }
+  ]
+}
