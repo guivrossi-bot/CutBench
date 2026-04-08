@@ -20,6 +20,10 @@ const EXOTIC_METALS = {
 // ── Platforms excluded from results (bad/unverified data) ────────────────────
 const EXCLUDED_PLATFORMS = /bystronic|bysprint/i;
 
+// ── Class patterns excluded from results (bad/unverified data) ───────────────
+// "HySpeed" entries have wrong values (interpolated/fabricated, not from official cut charts)
+const EXCLUDED_CLASSES = /hyspeed/i;
+
 // ── Reference categories ───────────────────────────────────────────────────────
 // Every data row belongs to one of three source types shown in the comparator.
 const REF = {
@@ -570,7 +574,10 @@ export default function CutComparator({ onBack }) {
       .order("feedrate_mmpm", { ascending: false })
       .then(({ data, error }) => {
         if (error) setError(error.message);
-        else setResults((data || []).filter(r => !EXCLUDED_PLATFORMS.test(r.platform?.model ?? "")));
+        else setResults((data || []).filter(r =>
+          !EXCLUDED_PLATFORMS.test(r.platform?.model ?? "") &&
+          !EXCLUDED_CLASSES.test(r.class ?? "")
+        ));
         setLoading(false);
       });
   }, [material, thickness]);
